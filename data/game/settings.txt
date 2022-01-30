@@ -1,0 +1,12 @@
+skipMenu-false
+particleEffects-true
+gamespeed-2
+mul-2
+fps-60
+streakrenderres-0.1
+physics-3
+firstup-1.1
+deterioration-0.9
+savelevel-2
+//cheats:
+theflash

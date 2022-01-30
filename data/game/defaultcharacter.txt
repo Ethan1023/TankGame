@@ -1,0 +1,23 @@
+//Fixes, Brake, Delay(int), Energy, Generation, Health, Mass, maTerials(int), maxVelocity, Name, Power, Regen, Shield, Upgradepoints(int), Weaponid(int), sLow (Regen, Usage, Max, Snapiness(response)), 0primary, 1secondary
+f5
+b25000
+d10
+e100
+g30
+h200
+m160
+t100
+v75
+nPlayer
+p50000
+r15
+s200
+u10
+w0
+w1
+00
+11
+lr1
+lu1
+lm16
+ls1

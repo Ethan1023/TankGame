@@ -1,0 +1,99 @@
+bool shapescrossed(double*, double*, double, double, int, double*, double*, int);
+bool linepassedover(double, double, double, double, double, double, double, double, double, double);
+
+bool shapescrossed(double* xa, double* ya, double* xb, double* yb, int shape1, double* xs, double* ys, int shape2){
+    for(int i=0;i<shape1;i++){
+        if(passedovershape(xa[i], ya[i], xb[i], yb[i], xs, ys, shape2))
+            return true;
+    }
+    double xat;
+    double yat;
+    double xbt;
+    double ybt;
+    for(int i=0;i<shape1-1;i++){
+        for(int j=i+1;j<shape1;j++){
+            for(int k=0;k<collisionAccuracy;k++){
+                xat = xa[i] + k*(xa[j]-xa[i])/collisionAccuracy;
+                yat = ya[i] + k*(ya[j]-ya[i])/collisionAccuracy;
+                xbt = xb[i] + k*(xb[j]-xb[i])/collisionAccuracy;
+                ybt = yb[i] + k*(yb[j]-yb[i])/collisionAccuracy;
+                if(passedovershape(xat, yat, xbt, ybt, xs, ys, shape2))
+                    return true;
+            }
+        }
+    }
+    /*
+    for(int i=0;i<shape1-1;i++){
+        for(int j=i+1;j<shape1;j++){
+            for(int k=0;k<shape2;k++){
+                if(linepassedover(xs[k], ys[k], xa[i], ya[i], xa[j], ya[j], xb[i], yb[i], xb[j], yb[j]) && linepassedover(xs[k], ys[k], xa[i], ya[i], xb[i], yb[i], xa[j], ya[j], xb[j], yb[j]))
+                    return true;
+            }
+        }
+    }*/
+    return false;
+}
+
+bool linepassedover(double x, double y, double x1a, double y1a, double x1b, double y1b, double x2a, double y2a, double x2b, double y2b){
+    /*double yL1 = yfromxcoords(x, x1a, y1a, x1b, y1b);
+    bool ret = true;
+    if(!(yL1 != yL1)){
+        double yL2 = yfromxcoords(x, x2a, y2a, x2b, y2b);
+        ret = ret && (y < yL1 != y < yL2);
+    }
+    double xL1 = yfromxcoords(y, y1a, x1a, y1b, x1b);
+    if(!(xL1 != xL1)){
+        double xL2 = yfromxcoords(y, y2a, x2a, y2b, x2b);
+        ret = ret && (x < xL1 != x < xL2);
+    }*/
+    AngleRect temp;// = new AngleRect;
+    temp.x1 = x1a;
+    temp.y1 = y1a;
+    temp.x2 = x1b;
+    temp.y2 = y1b;
+    temp.x3 = x2a;
+    temp.y3 = y2a;
+    temp.x4 = x2b;
+    temp.y4 = y2b;
+    return checkcollision(temp, x, y);
+//    std::cout << "x:   " << x << "\ny:   " << y << "\nx1a: " << x1a << "\ny1a: " << y1a << "\nx1b: " << x1b << "\ny1b: " << y1b << "\nx2a: " << x2a << "\ny2a: " << y2a << "\nx2b: " << x2b << "\ny2b: " << y2b << "\npassed: " << ret << "\n";;
+    //system("pause");
+//    if(ret)
+//        SDL_Delay(10000);
+    //return ret;
+}
+
+bool checkcollision(AngleRect shape, double x, double y){   //USE THIS TO CHECK IF LINE PASSED OVER DOT; ITS THE SAME THING FFS !!!
+    bool b12and34 = false;  //between lines 12 and 34
+    bool b13and24 = false;
+    double y12 = yfromxcoords(x, shape.x1, shape.y1, shape.x2, shape.y2);
+    double y34 = yfromxcoords(x, shape.x3, shape.y3, shape.x4, shape.y4);
+    double y13 = yfromxcoords(x, shape.x1, shape.y1, shape.x3, shape.y3);
+    double y24 = yfromxcoords(x, shape.x2, shape.y2, shape.x4, shape.y4);
+    if(y12 != y12 || y34 != y34){   //if y12 or y34 are NAN swap x and y axis
+        y12 = yfromxcoords(y, shape.y1, shape.x1, shape.y2, shape.x2);
+        y34 = yfromxcoords(y, shape.y3, shape.x3, shape.y4, shape.x4);
+        if((x < y12) == (x > y34))
+            b12and34 = true;
+    }else{
+        if((y < y12) == (y > y34))  //if point is between the two lines
+            b12and34 = true;
+    }
+
+    if(y24 != y24 || y13 != y13){
+        y13 = yfromxcoords(y, shape.y1, shape.x1, shape.y3, shape.x3);
+        y24 = yfromxcoords(y, shape.y2, shape.x2, shape.y4, shape.x4);
+        if((x < y13) == (x > y24))
+            b13and24 = true;
+    }else{
+        if((y < y13) == (y > y24))
+            b13and24 = true;
+    }
+
+    return b12and34 && b13and24;    //is point between all four lines
+}
+
+bool checkcollision(AngleRect shape1, AngleRect shape2){
+    return checkcollision(shape1, shape2.x1, shape2.y1) || checkcollision(shape1, shape2.x2, shape2.y2) || checkcollision(shape1, shape2.x3, shape2.y3) || checkcollision(shape1, shape2.x4, shape2.y4)
+    || checkcollision(shape2, shape1.x1, shape1.y1) || checkcollision(shape2, shape1.x2, shape1.y2) || checkcollision(shape2, shape1.x3, shape1.y3) || checkcollision(shape2, shape1.x4, shape1.y4);
+}

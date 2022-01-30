@@ -1,0 +1,14 @@
+//n=name, a=add and start new,
+//Other
+    //Power, Brake, maxVelocity, Mass
+//Weapons
+    //Primary, Secondary
+        //Speed, Rate of fire(int), Accuracy(spread), Burst(int), Damage
+//Dimensions
+    //Length, Width, turretRadius
+    //Barrel, Primary, Secondary
+        //Length, Width
+//Health
+    //Health, Shield, Regen, Delay
+//Look
+    //Body, Turret, bArrel, Primary, Secondary
